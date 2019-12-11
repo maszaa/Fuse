@@ -699,6 +699,25 @@ describe('Weighted search', () => {
     })
   })
 
+  describe('When searching for the term "John S" with author weighted as 1 and higher than other keys', () => {
+    const customOptions = {
+      keys: [
+        {name: 'title', weight: 0.3},
+        {name: 'author', weight: 1}
+      ]
+    }
+    let fuse
+    let result
+    beforeEach(() => {
+      fuse = setup(customBookList, customOptions)
+      return result = fuse.search('John S')
+    })
+
+    test('We get the book with author "John Smith" as author is weighted higher', () => {
+      expect(result[0]).toMatchObject({title: 'The life of Jane', author: 'John Smith', tags: ['john', 'smith']})
+    })
+  })
+
   describe('When searching for the term "John Smith" with title weighted higher', () => {
     const customOptions = {
       keys: [
